@@ -1,0 +1,31 @@
+{
+    "name": "echoecho",
+    "description": "Simple testing echo responses to HTTP requests",
+    "author": "Dav Glass <davglass@gmail.com>",
+    "version": "0.0.1",
+    "dependencies": {
+    },
+    "devDependencies": {
+        "jslint": "*", 
+        "vows": "*" 
+    },
+    "scripts": {
+        "pretest": "jslint --node ./lib/*.js",
+        "test": "vows --spec ./tests/*.js"
+    },
+    "main": "./lib/echo.js",
+    "keywords": [
+        "echo", "http", "testing", "responses"
+    ],
+    "bugs": { "url" : "http://github.com/davglass/echoecho/issues" },
+    "licenses":[
+        {
+            "type" : "BSD",
+            "url" : "https://github.com/davglass/echoecho/blob/master/LICENSE"
+        }
+    ],
+    "repository": {
+        "type":"git",
+        "url":"http://github.com/davglass/echoecho.git"
+    }
+}
