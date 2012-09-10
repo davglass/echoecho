@@ -193,8 +193,7 @@ var tests = {
                 topic: function() {
                     fetch({
                         method: 'DELETE',
-                        path: '/foo/bar/baz/echo/delete',
-                        body: 'foo=bar'
+                        path: '/foo/bar/baz/echo/delete?foo=bar'
                     }, this.callback);
                 },
                 "with query body": function(topic) {
@@ -206,8 +205,7 @@ var tests = {
                 topic: function() {
                     fetch({
                         method: 'GET',
-                        path: '/foo/bar/baz/echo/delete',
-                        body: 'foo=bar'
+                        path: '/foo/bar/baz/echo/delete?foo=bar'
                     }, this.callback);
                 },
                 "with query body": function(topic) {
