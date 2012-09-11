@@ -26,6 +26,7 @@ Default Routes
 * `put` - PUT with data
 * `delete` - DELETE with data
 * `status` - Special status route `echo/status/403` returns a `403`, all `http.STATUS_CODES` supported
+* `delay` - Special delay route `echo/delay/2` returns a 200 delayed by 2 seconds.
 
 Using in Your Server
 --------------------

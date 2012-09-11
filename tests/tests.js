@@ -238,6 +238,18 @@ var tests = {
                     assert.equal(topic.code, 403);
                     assert.equal(topic.body, 'foo=bar');
                 }
+            },
+            "and delay 3 seconds": {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/delay/3'
+                    }, this.callback);
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.body, 'waited for 3 seconds');
+                }
             }
         }
     }
