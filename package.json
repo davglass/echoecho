@@ -2,7 +2,7 @@
     "name": "echoecho",
     "description": "Simple testing echo responses to HTTP requests",
     "author": "Dav Glass <davglass@gmail.com>",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "dependencies": {
     },
     "devDependencies": {
