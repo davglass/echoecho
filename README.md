@@ -30,6 +30,8 @@ Default Routes
 Using in Your Server
 --------------------
 
+__I recommend using it with Express/Connect to get a properly parsed body for POST/PUT requests__
+
 There are 3 things you need to do inside the Node server providing these tests:
 
 * Tell `echoecho` your relative paths to scan
