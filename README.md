@@ -27,6 +27,7 @@ Default Routes
 * `delete` - DELETE with data
 * `status` - Special status route `echo/status/403` returns a `403`, all `http.STATUS_CODES` supported
 * `delay` - Special delay route `echo/delay/2` returns a 200 delayed by 2 seconds.
+* `json` - Send query parameters or POST parameters and get them back as JSON
 
 Using in Your Server
 --------------------

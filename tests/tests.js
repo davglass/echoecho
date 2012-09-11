@@ -1,6 +1,8 @@
 var vows = require('vows'),
     assert = require('assert'),
     http = require('http'),
+    parse = require('url').parse,
+    qs = require('querystring');
     echoecho = require('../lib/echo');
 
 
@@ -237,6 +239,70 @@ var tests = {
                 "with query body": function(topic) {
                     assert.equal(topic.code, 403);
                     assert.equal(topic.body, 'foo=bar');
+                }
+            },
+            "and get default json": {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/json'
+                    }, this.callback);
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.body, '{ "echo": true }');
+                }
+            },
+            "and post default json": {
+                topic: function() {
+                    fetch({
+                        method: 'POST',
+                        path: '/foo/bar/baz/echo/json'
+                    }, this.callback);
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.body, '{ "echo": true }');
+                }
+            },
+            "and get custom json": {
+                topic: function() {
+                    var self = this,
+                        url = '/foo/bar/baz/echo/json?foo=bar&baz=world';
+
+                    fetch({
+                        method: 'GET',
+                        path: url
+                    }, function(err, data) {
+                        var q = parse(url);
+                        data.expected = JSON.stringify(qs.parse(q.query));
+                        self.callback(err, data);
+                    });
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.headers['content-type'], 'application/json');
+                    assert.equal(topic.body, topic.expected);
+                }
+            },
+            "and post custom json": {
+                topic: function() {
+                    var self = this,
+                        url = '/foo/bar/baz/echo/json?foo=bar&baz=world&do=not';
+
+                    fetch({
+                        method: 'POST',
+                        path: url
+                    }, function(err, data) {
+                        var q = parse(url);
+                        data.expected = JSON.stringify(qs.parse(q.query));
+                        self.callback(err, data);
+                    });
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.headers['content-type'], 'application/json');
+                    assert.equal(topic.body, topic.expected);
                 }
             },
             "and delay 3 seconds": {
