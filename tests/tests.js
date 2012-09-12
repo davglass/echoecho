@@ -305,6 +305,76 @@ var tests = {
                     assert.equal(topic.body, topic.expected);
                 }
             },
+            "and get default jsonp": {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/jsonp?callback=baz'
+                    }, this.callback);
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.body, 'baz({"echo":true});');
+                }
+            },
+            "and post default jsonp": {
+                topic: function() {
+                    fetch({
+                        method: 'POST',
+                        path: '/foo/bar/baz/echo/jsonp?callback=foo'
+                    }, this.callback);
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.body, 'foo({"echo":true});');
+                }
+            },
+            "and get custom jsonp": {
+                topic: function() {
+                    var self = this,
+                        url = '/foo/bar/baz/echo/jsonp?callback=yo&foo=bar&baz=world';
+
+                    fetch({
+                        method: 'GET',
+                        path: url
+                    }, function(err, data) {
+                        var q = parse(url);
+                        var payload = qs.parse(q.query);
+                        var callback = payload.callback;
+                        delete payload.callback;
+                        data.expected = callback + '(' + JSON.stringify(payload) + ');';
+                        self.callback(err, data);
+                    });
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.headers['content-type'], 'application/json');
+                    assert.equal(topic.body, topic.expected);
+                }
+            },
+            "and post custom jsonp": {
+                topic: function() {
+                    var self = this,
+                        url = '/foo/bar/baz/echo/jsonp?callback=yoyo&foo=bar&baz=world&do=not';
+
+                    fetch({
+                        method: 'POST',
+                        path: url
+                    }, function(err, data) {
+                        var q = parse(url);
+                        var payload = qs.parse(q.query);
+                        var callback = payload.callback;
+                        delete payload.callback;
+                        data.expected = callback + '(' + JSON.stringify(payload) + ');';
+                        self.callback(err, data);
+                    });
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.headers['content-type'], 'application/json');
+                    assert.equal(topic.body, topic.expected);
+                }
+            },
             "and delay 3 seconds": {
                 topic: function() {
                     fetch({
