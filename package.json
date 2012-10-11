@@ -6,11 +6,12 @@
     "dependencies": {
     },
     "devDependencies": {
-        "jslint": "*", 
-        "vows": "*" 
+        "vows": "*",
+        "yui-lint": "~0.1.1",
+        "jshint": "~0.9.0"
     },
     "scripts": {
-        "pretest": "jslint --node ./lib/*.js",
+        "pretest": "jshint --config ./node_modules/yui-lint/jshint.json ./lib/*.js",
         "test": "vows --spec ./tests/*.js"
     },
     "main": "./lib/echo.js",
