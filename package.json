@@ -2,9 +2,7 @@
     "name": "echoecho",
     "description": "Simple testing echo responses to HTTP requests",
     "author": "Dav Glass <davglass@gmail.com>",
-    "version": "0.0.5",
-    "dependencies": {
-    },
+    "version": "0.0.6",
     "devDependencies": {
         "vows": "*",
         "yui-lint": "~0.1.1",
