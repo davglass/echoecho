@@ -6,11 +6,12 @@
     "devDependencies": {
         "vows": "*",
         "yui-lint": "~0.1.1",
-        "jshint": "~0.9.0"
+        "jshint": "~0.9.0",
+        "istanbul": "*"
     },
     "scripts": {
         "pretest": "jshint --config ./node_modules/yui-lint/jshint.json ./lib/*.js",
-        "test": "vows --spec ./tests/*.js"
+        "test": "istanbul test vows -- --spec ./tests/*.js"
     },
     "main": "./lib/echo.js",
     "keywords": [
