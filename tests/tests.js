@@ -514,8 +514,6 @@ var tests = {
                 "with query body": function(topic) {
                     assert.equal(topic.code, 200);
                     assert.equal(topic.headers['content-type'], 'application/json');
-                    console.log(topic.body);
-                    console.log(topic.expected);
                     assert.equal(topic.body, topic.expected);
                 }
             },
