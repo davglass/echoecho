@@ -18,6 +18,8 @@ Build Status
 
 [![Travis Build Status](https://secure.travis-ci.org/davglass/echoecho.png?branch=master)](http://travis-ci.org/davglass/echoecho)
 
+[Code Coverage Report](http://davglass.github.com/echoecho/)
+
 Default Routes
 --------------
 
