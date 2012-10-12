@@ -8,11 +8,20 @@ var vows = require('vows'),
 
 //Server to test against.
 var server = http.createServer(function(req, res) {
-    if (echoecho.handle(req)) {
+    if (req.url.indexOf('-express') > -1) {
+        var p = parse(req.url);
+        req.url = req.url.replace('-express', '');
+        req.body = qs.parse(p.query);
+        echoecho.serve(req, res);
+    } else if (echoecho.handle(req)) {
         echoecho.serve(req, res);
     } else {
-        res.writeHead(200);
-        res.end('DEFAULT');
+        if (req.url.indexOf('skipthisrequest') > -1) {
+            echoecho.serve(req, res);
+        } else {
+            res.writeHead(200);
+            res.end('DEFAULT');
+        }
     }
 });
 server.listen(8181);
@@ -141,6 +150,54 @@ var tests = {
                     assert.equal(topic.body, 'Not Found');
                 }
             },
+            "and get status asdf": {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/status/asdf'
+                    }, this.callback);
+                },
+                "with Not Found body": function(topic) {
+                    assert.equal(topic.code, 500);
+                    assert.equal(topic.body, 'Unknown Echo Status');
+                }
+            },
+            "and get unknown scheme route": {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/asdfasdf'
+                    }, this.callback);
+                },
+                "with Not Found body": function(topic) {
+                    assert.equal(topic.code, 404);
+                    assert.equal(topic.body, 'Not Found');
+                }
+            },
+            "and get no scheme route": {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/'
+                    }, this.callback);
+                },
+                "with Not Found body": function(topic) {
+                    assert.equal(topic.code, 404);
+                    assert.equal(topic.body, 'Not Found');
+                }
+            },
+            "and get unknown scheme route that is unhandled": {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/skipthisrequest'
+                    }, this.callback);
+                },
+                "with Not Found body": function(topic) {
+                    assert.equal(topic.code, 404);
+                    assert.equal(topic.body, 'Not Found');
+                }
+            },
             "and get query": {
                 topic: function() {
                     fetch({
@@ -151,6 +208,18 @@ var tests = {
                 "with query body": function(topic) {
                     assert.equal(topic.code, 200);
                     assert.equal(topic.body, 'foo=bar');
+                }
+            },
+            "and get no query": {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/get'
+                    }, this.callback);
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.body, '');
                 }
             },
             "and get mismatch": {
@@ -201,6 +270,18 @@ var tests = {
                 "with query body": function(topic) {
                     assert.equal(topic.code, 200);
                     assert.equal(topic.body, 'foo=bar');
+                }
+            },
+            "and delete with no query": {
+                topic: function() {
+                    fetch({
+                        method: 'DELETE',
+                        path: '/foo/bar/baz/echo/delete'
+                    }, this.callback);
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.body, '');
                 }
             },
             "and delete mismatch": {
@@ -288,14 +369,38 @@ var tests = {
             "and post custom json": {
                 topic: function() {
                     var self = this,
-                        url = '/foo/bar/baz/echo/json?foo=bar&baz=world&do=not';
+                        body = 'foo=bar&baz=world&do=not',
+                        url = '/foo/bar/baz/echo/json?' + body;
 
                     fetch({
                         method: 'POST',
-                        path: url
+                        path: url,
+                        body: body
                     }, function(err, data) {
                         var q = parse(url);
-                        data.expected = JSON.stringify(qs.parse(q.query));
+                        data.expected = JSON.stringify(qs.parse(body));
+                        self.callback(err, data);
+                    });
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.headers['content-type'], 'application/json');
+                    assert.equal(topic.body, topic.expected);
+                }
+            },
+            "and post custom json, express style": {
+                topic: function() {
+                    var self = this,
+                        body = 'foo=bar&baz=world&do=not',
+                        url = '/foo/bar/baz/echo/json-express?' + body;
+
+                    fetch({
+                        method: 'POST',
+                        path: url,
+                        body: body
+                    }, function(err, data) {
+                        var q = parse(url);
+                        data.expected = JSON.stringify(qs.parse(body));
                         self.callback(err, data);
                     });
                 },
@@ -315,6 +420,19 @@ var tests = {
                 "with query body": function(topic) {
                     assert.equal(topic.code, 200);
                     assert.equal(topic.body, 'baz({"echo":true});');
+                }
+            },
+            "and get default jsonp without callback": {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/jsonp?baz'
+                    }, this.callback);
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 403);
+                    var b = JSON.parse(topic.body);
+                    assert.equal(b.echo, 'error, no callback');
                 }
             },
             "and post default jsonp": {
@@ -375,6 +493,50 @@ var tests = {
                     assert.equal(topic.body, topic.expected);
                 }
             },
+            "and post custom jsonp, express style": {
+                topic: function() {
+                    var self = this,
+                        body = 'callback=yoyo&foo=bar&baz=world&do=not',
+                        url = '/foo/bar/baz/echo/jsonp-express?' + body;
+
+                    fetch({
+                        method: 'POST',
+                        path: url
+                    }, function(err, data) {
+                        var q = parse(url);
+                        var payload = qs.parse(body);
+                        var callback = payload.callback;
+                        delete payload.callback;
+                        data.expected = callback + '(' + JSON.stringify(payload) + ');';
+                        self.callback(err, data);
+                    });
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal(topic.headers['content-type'], 'application/json');
+                    console.log(topic.body);
+                    console.log(topic.expected);
+                    assert.equal(topic.body, topic.expected);
+                }
+            },
+            "and post custom jsonp, express style without callback": {
+                topic: function() {
+                    var self = this,
+                        body = 'foo=bar&baz=world&do=not',
+                        url = '/foo/bar/baz/echo/jsonp-express?' + body;
+
+                    fetch({
+                        method: 'POST',
+                        path: url
+                    }, this.callback);
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 403);
+                    assert.equal(topic.code, 403);
+                    var b = JSON.parse(topic.body);
+                    assert.equal(b.echo, 'error, no callback');
+                }
+            },
             "and delay 3 seconds": {
                 topic: function() {
                     fetch({
@@ -390,5 +552,59 @@ var tests = {
         }
     }
 };
+
+Object.keys(http.STATUS_CODES).forEach(function(code) {
+    var s = http.STATUS_CODES[code],
+        c = Number(code, 10);
+    if (c < 200) {
+        return;
+    }
+    var test = {
+        topic: function() {
+            fetch({
+                method: 'GET',
+                path: '/foo/bar/baz/echo/status/' + code
+            }, this.callback);
+        }
+    };
+    test["with " + s + " body"] = function(topic) {
+        assert.equal(topic.code, code);
+        assert.equal(topic.body, s);
+    };
+    tests["should be loaded"]['and should load paths']["get status " + code] = test;
+});
+
+
+
+tests["should be loaded"]['and should load paths']["should load custom scheme"] = {
+
+    topic: function() {
+        this.count = Object.keys(echoecho.scheme);
+        echoecho.load({
+            'davglass': function(req, res) {
+                res.writeHead(200, echoecho.scheme.headers);
+                res.end('DAVGLASS WAS HERE');
+            }
+        });
+        return echoecho;
+    },
+    "should have a new scheme": function(topic) {
+        assert.notEqual(this.count, Object.keys(echoecho.scheme));
+        assert.equal(this.count.length + 1, Object.keys(echoecho.scheme).length);
+    },
+    "and should use new scheme": {
+        topic: function() {
+            fetch({
+                method: 'GET',
+                path: '/foo/bar/baz/echo/davglass'
+            }, this.callback);
+        },
+        "custom scheme should respond": function(topic) {
+            assert.equal(topic.body, 'DAVGLASS WAS HERE');
+        }
+    }
+
+};
+
 
 vows.describe('echoecho').addBatch(tests).export(module);
