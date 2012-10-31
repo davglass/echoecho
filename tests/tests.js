@@ -582,6 +582,26 @@ var tests = {
                     assert.equal(topic.code, 200);
                     assert.equal(topic.body, 'waited for 3 seconds');
                 }
+            },
+            'queries without base': {
+                'and use validator with object': {
+                    topic: function() {
+                        return echoecho.validate({
+                            url: '/have/not/used/echo/status/500'
+                        });
+                    },
+                    'should return true': function(topic) {
+                        assert.equal(topic, '500');
+                    }
+                },
+                'and use validator with string': {
+                    topic: function() {
+                        return echoecho.validate('/have/not/used/this/yet/echo/jsonp');
+                    },
+                    'should return true': function(topic) {
+                        assert.equal(topic, 'jsonp');
+                    }
+                },
             }
         }
     }
