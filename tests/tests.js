@@ -117,7 +117,7 @@ var tests = {
             'and use handler with object': {
                 topic: function() {
                     return echoecho.handle({
-                        url: '/foo/bar/baz/echo/404'
+                        url: '/foo/bar/baz/echo/status/500'
                     });
                 },
                 'should return true': function(topic) {
@@ -126,10 +126,28 @@ var tests = {
             },
             'and use handler with string': {
                 topic: function() {
-                    return echoecho.handle('/foo/bar/baz/echo/404');
+                    return echoecho.handle('/foo/bar/baz/echo/jsonp');
                 },
                 'should return true': function(topic) {
                     assert.isTrue(topic);
+                }
+            },
+            'and use validator with object': {
+                topic: function() {
+                    return echoecho.validate({
+                        url: '/foo/bar/baz/echo/status/500'
+                    });
+                },
+                'should return true': function(topic) {
+                    assert.equal(topic, '500');
+                }
+            },
+            'and use validator with string': {
+                topic: function() {
+                    return echoecho.validate('/foo/bar/baz/echo/jsonp');
+                },
+                'should return true': function(topic) {
+                    assert.equal(topic, 'jsonp');
                 }
             },
             "and default response": {
