@@ -114,6 +114,24 @@ var tests = {
             "and handles no trailing slash": function(topic) {
                 assert.isTrue(topic['/foo/bar/not']);
             },
+            'and use handler with object': {
+                topic: function() {
+                    return echoecho.handle({
+                        url: '/foo/bar/baz/echo/404'
+                    });
+                },
+                'should return true': function(topic) {
+                    assert.isTrue(topic);
+                }
+            },
+            'and use handler with string': {
+                topic: function() {
+                    return echoecho.handle('/foo/bar/baz/echo/404');
+                },
+                'should return true': function(topic) {
+                    assert.isTrue(topic);
+                }
+            },
             "and default response": {
                 topic: function() {
                     fetch({
