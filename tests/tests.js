@@ -93,6 +93,9 @@ var tests = {
         'and have BASE object': function (topic) {
             assert.isObject(topic.BASE);
         },
+        'and have EchoEcho Function': function (topic) {
+            assert.isFunction(topic.EchoEcho);
+        },
         'and should load paths': {
             topic: function() {
                 echoecho.paths([
@@ -583,25 +586,71 @@ var tests = {
                     assert.equal(topic.body, 'waited for 3 seconds');
                 }
             },
-            'queries without base': {
-                'and use validator with object': {
+            'should be instantitable': {
+                'should be different objects': {
                     topic: function() {
-                        return echoecho.validate({
-                            url: '/have/not/used/echo/status/500'
+                        var one = new echoecho.EchoEcho({
+                            paths: ['/one/one.html']
                         });
+                        var two = new echoecho.EchoEcho({
+                            paths: ['/two/one/', '/two/two/']
+                        });
+
+                        return [one, two]
+                    
                     },
-                    'should return true': function(topic) {
-                        assert.equal(topic, '500');
+                    'different paths': function(topic) {
+                        assert.notDeepEqual(topic[0].BASE, topic[1].BASE);
                     }
                 },
-                'and use validator with string': {
-                    topic: function() {
-                        return echoecho.validate('/have/not/used/this/yet/echo/jsonp');
+                'unknown queries with all option': {
+                    'and use validator with object': {
+                        topic: function() {
+                            return new echoecho.EchoEcho({ all: true }).validate({
+                                url: '/have/not/used/echo/status/500'
+                            });
+                        },
+                        'should return "500"': function(topic) {
+                            assert.equal(topic, '500');
+                        }
                     },
-                    'should return true': function(topic) {
-                        assert.equal(topic, 'jsonp');
+                    'and use validator with string': {
+                        topic: function() {
+                            return new echoecho.EchoEcho({ all: true }).validate('/have/not/used/this/yet/echo/jsonp');
+                        },
+                        'should return "jsonp"': function(topic) {
+                            assert.equal(topic, 'jsonp');
+                        }
+                    },
+                    'and use validator with no echo': {
+                        topic: function() {
+                            return new echoecho.EchoEcho({ all: true }).validate('/have/not/used/this/yet/ech/jsonp');
+                        },
+                        'should return false': function(topic) {
+                            assert.isFalse(topic);
+                        }
                     }
                 },
+                'unknown queries without all option': {
+                    'and use validator with object': {
+                        topic: function() {
+                            return new echoecho.EchoEcho().validate({
+                                url: '/have/not/used/echo/status/500'
+                            });
+                        },
+                        'should return false': function(topic) {
+                            assert.isFalse(topic);
+                        }
+                    },
+                    'and use validator with string': {
+                        topic: function() {
+                            return new echoecho.EchoEcho().validate('/have/not/used/this/yet/echo/jsonp');
+                        },
+                        'should return false': function(topic) {
+                            assert.isFalse(topic);
+                        }
+                    }
+                }
             }
         }
     }

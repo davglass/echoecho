@@ -60,7 +60,32 @@ if (echoecho.handle(req.url)) { //Can echoecho respond to this?
 } else {
     //throw your 404
 }
+```
 
+Instantiate an EchoEcho object:
+
+```
+var ee = new echoecho.EchoEcho({
+    paths: [] //base paths
+});
+
+//Like above
+ee.handle();
+ee.serve();
+
+```
+
+Handling all requests with /echo/ in the URL:
+
+```
+
+var ee = new require('echoecho').EchoEcho({
+    all: true;
+});
+
+//Like above
+ee.handle();
+ee.serve();
 ```
 
 Using in Your Tests
