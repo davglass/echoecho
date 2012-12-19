@@ -173,6 +173,7 @@ var tests = {
                     }, this.callback);
                 },
                 "with OK body": function(topic) {
+                    assert.equal(topic.headers['access-control-allow-origin'], '*');
                     assert.equal(topic.code, 200);
                     assert.equal(topic.body, 'OK');
                 }
@@ -185,6 +186,7 @@ var tests = {
                     }, this.callback);
                 },
                 "with Not Found body": function(topic) {
+                    assert.equal(topic.headers['access-control-allow-origin'], '*');
                     assert.equal(topic.code, 404);
                     assert.equal(topic.body, 'Not Found');
                 }
@@ -245,6 +247,7 @@ var tests = {
                     }, this.callback);
                 },
                 "with query body": function(topic) {
+                    assert.equal(topic.headers['access-control-allow-origin'], '*');
                     assert.equal(topic.code, 200);
                     assert.equal(topic.body, 'foo=bar');
                 }
@@ -257,6 +260,7 @@ var tests = {
                     }, this.callback);
                 },
                 "with query body": function(topic) {
+                    assert.equal(topic.headers['access-control-allow-origin'], '*');
                     assert.equal(topic.code, 200);
                     assert.equal(topic.body, '');
                 }
