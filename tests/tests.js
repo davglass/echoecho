@@ -462,7 +462,7 @@ var tests = {
                 },
                 "with query body": function(topic) {
                     assert.equal(topic.code, 200);
-                    assert.equal(topic.body, 'baz({"echo":true});');
+                    assert.equal(topic.body, 'baz({"echo":true,"callback":"baz"});');
                 }
             },
             "and get default jsonp without callback": {
@@ -487,7 +487,7 @@ var tests = {
                 },
                 "with query body": function(topic) {
                     assert.equal(topic.code, 200);
-                    assert.equal(topic.body, 'foo({"echo":true});');
+                    assert.equal(topic.body, 'foo({"echo":true,"callback":"foo"});');
                 }
             },
             "and get custom jsonp": {
@@ -503,6 +503,7 @@ var tests = {
                         var payload = qs.parse(q.query);
                         var callback = payload.callback;
                         delete payload.callback;
+                        //payload.callback = callback;
                         data.expected = callback + '(' + JSON.stringify(payload) + ');';
                         self.callback(err, data);
                     });
