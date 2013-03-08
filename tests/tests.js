@@ -290,6 +290,19 @@ var tests = {
                     assert.equal(topic.body, 'foo=bar');
                 }
             },
+            "and post with no body": {
+                topic: function() {
+                    fetch({
+                        method: 'POST',
+                        path: '/foo/bar/baz/echo/post',
+                        body: ''
+                    }, this.callback);
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 204);
+                    assert.equal(topic.body, '');
+                }
+            },
             "and post mismatch": {
                 topic: function() {
                     fetch({
@@ -602,7 +615,7 @@ var tests = {
                         });
 
                         return [one, two]
-                    
+
                     },
                     'different paths': function(topic) {
                         assert.notDeepEqual(topic[0].BASE, topic[1].BASE);
