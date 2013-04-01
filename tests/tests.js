@@ -445,6 +445,16 @@ var tests = {
                     assert.equal(topic.body, topic.expected);
                 }
             },
+            'and handle invalid custom json': {
+                topic: function() {
+                    fetch({
+                        path: '/foo/bar/baz/echo/json?response=invalidJSON'
+                    }, this.callback);
+                },
+                'with query body': function(res) {
+                    assert.equal(res.body, 'Bad Request');
+                }
+            },
             "and post custom json, express style": {
                 topic: function() {
                     var self = this,
@@ -605,6 +615,20 @@ var tests = {
                     assert.equal(topic.body, 'waited for 3 seconds');
                 }
             },
+            'and delay by a range of seconds': {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/delay/1-3'
+                    }, this.callback);
+                },
+                'with query body': function(res) {
+                    var delay = res.body.match(/[\d.]+/);
+                    delay = delay && parseFloat(delay);
+                    assert(delay <= 3, 'delay should be less than 3 seconds');
+                    assert(delay >= 1, 'delay should be more than 1 second');
+                }
+            },
             'should be instantitable': {
                 'should be different objects': {
                     topic: function() {
@@ -726,6 +750,69 @@ tests["should be loaded"]['and should load paths']["should load custom scheme"] 
         }
     }
 
+};
+
+// -- `response` query parameter tests ----------------------------------------
+
+function assertResponseParam(route, method) {
+    var json = '{"diaper":"huggies"}';
+        path = '/foo/bar/baz/echo/' + route + '?response=' + json
+        context = {
+            topic: function() {
+                fetch({
+                    method: method,
+                    path: path
+                }, this.callback);
+            }
+        };
+
+    context['delayed ' + route + ' route should respond'] = function (res) {
+        assert.equal(res.body, json, 'should have responded custom response');
+    }
+
+    return context;
+}
+
+tests['should be loaded']
+     ['and should load paths']
+     ['and should use custom response (query)'] = {
+    'get':    assertResponseParam('get', 'GET'),
+    'post':   assertResponseParam('post', 'POST'),
+    'json':   assertResponseParam('json', 'GET'),
+    'put':    assertResponseParam('post', 'PUT'),
+    'delete': assertResponseParam('delete', 'DELETE')
+};
+
+// -- `file` query parameter tests --------------------------------------------
+
+var file = fs.readFileSync(__dirname + '/fixtures/file.json', 'utf8');
+
+function assertFileParam(route, method) {
+    var path = '/foo/bar/baz/echo/' + route + '?file=../tests/fixtures/file.json'
+        context = {
+            topic: function() {
+                fetch({
+                    method: method,
+                    path: path
+                }, this.callback);
+            }
+        };
+
+    context['delayed ' + route + ' route should respond'] = function (res) {
+        assert.equal(res.body, file, 'should have responded custom response');
+    }
+
+    return context;
+}
+
+tests['should be loaded']
+     ['and should load paths']
+     ['and should use custom response (file)'] = {
+    'get':    assertFileParam('get', 'GET'),
+    'post':   assertFileParam('post', 'POST'),
+    'json':   assertFileParam('json', 'GET'),
+    'put':    assertFileParam('post', 'PUT'),
+    'delete': assertFileParam('delete', 'DELETE')
 };
 
 

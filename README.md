@@ -32,6 +32,29 @@ Default Routes
 * `json` - Send query parameters or POST parameters and get them back as JSON
 * `jsonp` - Send query parameters or POST parameters and get them back as JSON (pass a GET param of `callback=[yourcallback]`
 
+Delayed Responses
+-----------------
+
+You can delay an `echoecho` request with the `delay` route followed by a value
+in seconds (e.g., `/delay/3`) or a range in seconds (e.g., `/delay/1-3`). Given
+a range, the response will be delayed by a random period of time within the
+range.
+
+You can also delay any route by prepending the delay route (e.g.,
+`/delay/2/get`, `/delay/1-2/json?response={"hello":"world"}`, etc).
+
+Customized Responses
+--------------------
+
+You can customize the response content for any route (except for `status`)
+by specifying either a `response` or `file` query parameter.
+
+The `response` query parameter lets you specify the custom response in the URL,
+whereas the `file` query parameter will attempt to read a file on the server.
+
+The above ways of specifying custom responses will also work with any delayed
+route.
+
 Using in Your Server
 --------------------
 
