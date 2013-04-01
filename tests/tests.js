@@ -2,7 +2,8 @@ var vows = require('vows'),
     assert = require('assert'),
     http = require('http'),
     parse = require('url').parse,
-    qs = require('querystring');
+    qs = require('querystring'),
+    fs = require('fs'),
     echoecho = require('../lib/echo');
 
 
