@@ -1,16 +1,17 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <title>Code coverage report for lib/echo.js</title>
-    
-        <link rel='stylesheet' href='../prettify.css'>
-    
-    <style type='text/css'>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <style>
         body, html {
             margin:0; padding: 0;
         }
         body {
-            font-family: "Helvetic Neue", Helvetica,Arial;
+            font-family: Helvetica Neue, Helvetica,Arial;
             font-size: 10pt;
         }
         div.header, div.footer {
@@ -44,11 +45,14 @@
             font-size: 10pt;
         }
         pre {
-            font-family: consolas, menlo, monaco, monospace;
+            font-family: Consolas, Menlo, Monaco, monospace;
             margin: 0;
             padding: 0;
             line-height: 14px;
             font-size: 14px;
+            -moz-tab-size: 2;
+            -o-tab-size:  2;
+            tab-size: 2;
         }
 
         div.path { font-size: 110%; }
@@ -175,25 +179,25 @@
     </style>
 </head>
 <body>
-<div class='header high'>
-    <h1>Code coverage report for <span class='entity'>lib/echo.js</span></h1>
+<div class="header high">
+    <h1>Code coverage report for <span class="entity">lib/echo.js</span></h1>
     <h2>
         
-        Statements: <span class='metric'>100% <small>(48 / 48)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">98.31% <small>(58 / 59)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Branches: <span class='metric'>100% <small>(34 / 34)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">97.5% <small>(39 / 40)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Functions: <span class='metric'>100% <small>(9 / 9)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">100% <small>(10 / 10)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class='metric'>100% <small>(48 / 48)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">98.31% <small>(58 / 59)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
     </h2>
     <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">lib/</a> &#187; echo.js</div>
 </div>
-<div class='body'>
+<div class="body">
 <pre><table class="coverage">
 <tr><td class="line-count">1
 2
@@ -302,13 +306,38 @@
 105
 106
 107
-108</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -340,50 +369,71 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">175</span>
-<span class="cline-any cline-yes">170</span>
+<span class="cline-any cline-yes">217</span>
+<span class="cline-any cline-yes">212</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">175</span>
+<span class="cline-any cline-yes">217</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">175</span>
+<span class="cline-any cline-yes">217</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">172</span>
-<span class="cline-any cline-yes">510</span>
-<span class="cline-any cline-yes">169</span>
-<span class="cline-any cline-yes">169</span>
+<span class="cline-any cline-yes">214</span>
+<span class="cline-any cline-yes">636</span>
+<span class="cline-any cline-yes">211</span>
+<span class="cline-any cline-yes">211</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">175</span>
-<span class="cline-any cline-yes">87</span>
-<span class="cline-any cline-yes">87</span>
-<span class="cline-any cline-yes">87</span>
-<span class="cline-any cline-yes">85</span>
-<span class="cline-any cline-yes">85</span>
+<span class="cline-any cline-yes">217</span>
+<span class="cline-any cline-yes">108</span>
+<span class="cline-any cline-yes">108</span>
+<span class="cline-any cline-yes">108</span>
+<span class="cline-any cline-yes">106</span>
+<span class="cline-any cline-yes">106</span>
 <span class="cline-any cline-yes">58</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">175</span>
+<span class="cline-any cline-yes">217</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">84</span>
+<span class="cline-any cline-yes">105</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">84</span>
-<span class="cline-any cline-yes">84</span>
-<span class="cline-any cline-yes">81</span>
-<span class="cline-any cline-yes">25</span>
+<span class="cline-any cline-yes">105</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">105</span>
+<span class="cline-any cline-yes">102</span>
+<span class="cline-any cline-yes">46</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">33</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">56</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -417,7 +467,9 @@ http://yuilibrary.com/license/
 "use strict";
 &nbsp;
 var parse = require('url').parse;
-var path = require('path');
+var path  = require('path');
+var fs    = require('fs');
+var qs    = require('querystring');
 &nbsp;
 /*
 &nbsp;
@@ -487,10 +539,31 @@ EchoEcho.prototype = {
         return !!this.validate(req, true);
     },
     serve: function (req, res) {
-        var base = this.validate(req);
+        var self = this,
+            base = this.validate(req),
+            filepath,
+            parsed,
+            query,
+            data;
+&nbsp;
         if (base &amp;&amp; base !== true) {
             if (this.scheme[base]) {
-                this.scheme[base](req, res);
+                query  = parse(req.url).query,
+                parsed = qs.parse(query);
+&nbsp;
+                if (parsed.response) {
+                    this.scheme[base](req, res, parsed.response);
+                } else if (parsed.file) {
+                    filepath = path.join(__dirname, parsed.file);
+                    fs.readFile(filepath, function (err, data) {
+                        <span class="missing-if-branch" title="if path not taken"" >I</span>if (err) {
+<span class="cstat-no" title="statement not covered" >                            self.scheme.status(404, res);</span>
+                        }
+                        self.scheme[base](req, res, data);
+                    });
+                } else {
+                    this.scheme[base](req, res, data);
+                }
             } else {
                 this.scheme.status(base, res);
             }
@@ -520,10 +593,9 @@ module.exports.EchoEcho = EchoEcho;
 </table></pre>
 
 </div>
-<div class='footer'>
-    <div class='meta'>Generated by <a href='http://istanbul-js.org' target='_blank'>istanbul</a> at Fri Mar 08 2013 17:17:19 GMT-0600 (CST)</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Apr 03 2013 12:00:21 GMT-0500 (CDT)</div>
 </div>
-</body>
 
 <script src="../prettify.js"></script>
 
@@ -613,10 +685,11 @@ module.exports.EchoEcho = EchoEcho;
 
         Y.on('domready', function () {
             replaceTable(Y.one('div.coverage-summary table'));
-            if (prettyPrint) {
+            if (typeof prettyPrint === 'function') {
                 prettyPrint();
             }
         });
     });
 </script>
+</body>
 </html>
