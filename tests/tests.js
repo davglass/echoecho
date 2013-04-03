@@ -627,6 +627,19 @@ var tests = {
                     delay = delay && parseFloat(delay);
                     assert(delay <= 3, 'delay should be less than 3 seconds');
                     assert(delay >= 1, 'delay should be more than 1 second');
+                    assert.equal(res.code, 200);
+                }
+            },
+            'and default to 0 for bad delay values': {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/delay/delay'
+                    }, this.callback);
+                },
+                'with query body': function(res) {
+                    assert.equal(res.code, 200);
+                    assert.equal(res.body, 'waited for 0 seconds');
                 }
             },
             'should be instantitable': {
@@ -752,6 +765,29 @@ tests["should be loaded"]['and should load paths']["should load custom scheme"] 
 
 };
 
+// -- Setup for general testing of routes -------------------------------------
+
+var testRoutes = [{
+        name: 'get',
+        method: 'GET'
+    }, {
+        name: 'post',
+        method: 'POST'
+    }, {
+        name: 'json',
+        method: 'GET'
+    }, {
+        name: 'json',
+        method: 'POST'
+    }, {
+        name: 'put',
+        method: 'PUT'
+    }, {
+        name: 'delete',
+        method: 'DELETE'
+    }
+];
+
 // -- `response` query parameter tests ----------------------------------------
 
 function assertResponseParam(route, method) {
@@ -766,8 +802,8 @@ function assertResponseParam(route, method) {
             }
         };
 
-    context['delayed ' + route + ' route should respond'] = function (res) {
-        assert.equal(res.body, json, 'should have responded custom response');
+    context[route + ' route should use custom response'] = function (res) {
+        assert.equal(res.body, json);
     }
 
     return context;
@@ -775,13 +811,15 @@ function assertResponseParam(route, method) {
 
 tests['should be loaded']
      ['and should load paths']
-     ['and should use custom response (query)'] = {
-    'get':    assertResponseParam('get', 'GET'),
-    'post':   assertResponseParam('post', 'POST'),
-    'json':   assertResponseParam('json', 'GET'),
-    'put':    assertResponseParam('post', 'PUT'),
-    'delete': assertResponseParam('delete', 'DELETE')
-};
+     ['and should use custom response (query)'] = {};
+
+testRoutes.forEach(function (route) {
+    tests['should be loaded']
+         ['and should load paths']
+         ['and should use custom response (query)']
+         ['for route ' + route.name + ' with method ' + route.method]
+            = assertResponseParam(route.name, route.method);
+});
 
 // -- `file` query parameter tests --------------------------------------------
 
@@ -798,8 +836,8 @@ function assertFileParam(route, method) {
             }
         };
 
-    context['delayed ' + route + ' route should respond'] = function (res) {
-        assert.equal(res.body, file, 'should have responded custom response');
+    context[route + ' route should use custom response'] = function (res) {
+        assert.equal(res.body, file);
     }
 
     return context;
@@ -807,13 +845,48 @@ function assertFileParam(route, method) {
 
 tests['should be loaded']
      ['and should load paths']
-     ['and should use custom response (file)'] = {
-    'get':    assertFileParam('get', 'GET'),
-    'post':   assertFileParam('post', 'POST'),
-    'json':   assertFileParam('json', 'GET'),
-    'put':    assertFileParam('post', 'PUT'),
-    'delete': assertFileParam('delete', 'DELETE')
-};
+     ['and should use custom response (file)'] = {};
+
+testRoutes.forEach(function (route) {
+    tests['should be loaded']
+         ['and should load paths']
+         ['and should use custom response (file)']
+         ['for route ' + route.name + ' with method ' + route.method]
+            = assertFileParam(route.name, route.method);
+});
+
+// -- delayable routes --------------------------------------------------------
+
+function assertDelayedRoute(route, method) {
+    var json = '{"megatron":"decepticon","optimus":"autobot"}',
+        path = '/foo/bar/baz/echo/delay/1/' + route + '?response=' + json,
+        context = {
+            topic: function() {
+                fetch({
+                    method: method,
+                    path: path
+                }, this.callback);
+            }
+        };
+
+    context[route + ' route should be delayed'] = function (res) {
+        assert.equal(res.body, json);
+    }
+
+    return context;
+}
+
+tests['should be loaded']
+     ['and should load paths']
+     ['and routes should be delayable'] = {};
+
+testRoutes.forEach(function (route) {
+    tests['should be loaded']
+         ['and should load paths']
+         ['and routes should be delayable']
+         ['for route ' + route.name + ' with method ' + route.method]
+            = assertDelayedRoute(route.name, route.method);
+});
 
 
 vows.describe('echoecho').addBatch(tests).export(module);
