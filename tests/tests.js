@@ -4,7 +4,9 @@ var vows = require('vows'),
     parse = require('url').parse,
     qs = require('querystring'),
     fs = require('fs'),
-    echoecho = require('../lib/echo');
+    echoecho = require('../lib/echo'),
+    ip = process.env.IP || '127.0.0.1',
+    port = process.env.PORT || 8181;
 
 
 //Server to test against.
@@ -25,9 +27,9 @@ var server = http.createServer(function(req, res) {
         }
     }
 });
-server.listen(8181);
+server.listen(port);
 
-var baseURL = 'http://127.0.0.1:8181/';
+var baseURL = 'http://' + ip + ':' + port + '/';
 
 var fetch = function(o, callback) {
     var err = null,
@@ -42,10 +44,10 @@ var fetch = function(o, callback) {
     }
 
     var request = http.request({
-        url: '127.0.0.1',
-        port: 8181,
+        url: ip,
+        port: port,
         path: o.path,
-        method: method,
+        method: fn,
         headers: headers
     }, function(res) {
         var data = '';
@@ -487,6 +489,18 @@ var tests = {
                 "with query body": function(topic) {
                     assert.equal(topic.code, 200);
                     assert.equal(topic.body, 'baz({"echo":true,"callback":"baz"});');
+                }
+            },
+            "and get default jsonp with empty querystring (?&callback=baz)": {
+                topic: function() {
+                    fetch({
+                        method: 'GET',
+                        path: '/foo/bar/baz/echo/jsonp?&callback=baz'
+                    }, this.callback);
+                },
+                "with query body": function(topic) {
+                    assert.equal(topic.code, 200);
+                    assert.equal('baz({"echo":true,"callback":"baz"});', topic.body);
                 }
             },
             "and get default jsonp without callback": {
