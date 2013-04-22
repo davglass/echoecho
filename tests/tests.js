@@ -902,5 +902,37 @@ testRoutes.forEach(function (route) {
             = assertDelayedRoute(route.name, route.method);
 });
 
+// -- `type` query parameter tests --------------------------------------------
+
+function assertContentType(route, method) {
+    var path = '/foo/bar/baz/echo/' + route + '?type=css';
+        context = {
+            topic: function() {
+                fetch({
+                    method: method,
+                    path: path
+                }, this.callback);
+            }
+        };
+
+    context[route + ' route should respond with specified content type'] = function (res) {
+        assert.equal(res.headers['content-type'], 'text/css');
+    }
+
+    return context;
+}
+
+tests['should be loaded']
+     ['and should load paths']
+     ['and should respond with specified content type'] = {};
+
+testRoutes.forEach(function (route) {
+    tests['should be loaded']
+         ['and should load paths']
+         ['and should respond with specified content type']
+         ['for route ' + route.name]
+            = assertContentType(route.name, route.method);
+});
+
 
 vows.describe('echoecho').addBatch(tests).export(module);
