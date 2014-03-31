@@ -29,8 +29,6 @@ var server = http.createServer(function(req, res) {
 });
 server.listen(port);
 
-var baseURL = 'http://' + ip + ':' + port + '/';
-
 var fetch = function(o, callback) {
     var err = null,
         method = o.method || 'get',
@@ -436,7 +434,6 @@ var tests = {
                         path: url,
                         body: body
                     }, function(err, data) {
-                        var q = parse(url);
                         data.expected = JSON.stringify(qs.parse(body));
                         self.callback(err, data);
                     });
@@ -468,7 +465,6 @@ var tests = {
                         path: url,
                         body: body
                     }, function(err, data) {
-                        var q = parse(url);
                         data.expected = JSON.stringify(qs.parse(body));
                         self.callback(err, data);
                     });
@@ -585,7 +581,6 @@ var tests = {
                         method: 'POST',
                         path: url
                     }, function(err, data) {
-                        var q = parse(url);
                         var payload = qs.parse(body);
                         var callback = payload.callback;
                         delete payload.callback;
@@ -601,8 +596,7 @@ var tests = {
             },
             "and post custom jsonp, express style without callback": {
                 topic: function() {
-                    var self = this,
-                        body = 'foo=bar&baz=world&do=not',
+                    var body = 'foo=bar&baz=world&do=not',
                         url = '/foo/bar/baz/echo/jsonp-express?' + body;
 
                     fetch({
@@ -761,7 +755,7 @@ tests["should be loaded"]['and should load paths']["should load custom scheme"] 
         });
         return echoecho;
     },
-    "should have a new scheme": function(topic) {
+    "should have a new scheme": function() {
         assert.notEqual(this.count, Object.keys(echoecho.scheme));
         assert.equal(this.count.length + 1, Object.keys(echoecho.scheme).length);
     },

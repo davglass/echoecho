@@ -103,7 +103,7 @@ Handling all requests with /echo/ in the URL:
 ```
 
 var ee = new require('echoecho').EchoEcho({
-    all: true;
+    all: true
 });
 
 //Like above
