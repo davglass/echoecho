@@ -66,6 +66,11 @@ There are 3 things you need to do inside the Node server providing these tests:
 * Check to see if `echoecho` can repond to a request
 * Have `echoecho` serve the request
 
+In addition, when serving requests, you can specify an optional directory
+root within which echoecho can find the files to serve for customized
+responses. This is specified by specifying an object containing a dirroot
+key as the third argument to `serve`.
+
 Here's a simple example, assuming your tests serve from `/build/tests/mine/index.html`
 
 ```
@@ -109,6 +114,27 @@ var ee = new require('echoecho').EchoEcho({
 //Like above
 ee.handle();
 ee.serve();
+```
+
+Handling all requests and serving from a different root:
+
+```
+
+var ee = new require('echoecho').EchoEcho({
+    all: true
+});
+
+// Can echoecho respond to this?
+if (echoecho.handle(req.url)) {
+    // Pass in the request and response objects and echoecho will take it from here.
+    // Specify the optional configuration for dirroot to use an alternate
+    // base before the requested file.
+    echoecho.serve(req, res, {
+        dirroot: '/path/to/intended/root'
+    });
+} else {
+    // throw your 404.
+}
 ```
 
 Using in Your Tests
