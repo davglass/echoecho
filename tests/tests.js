@@ -11,16 +11,20 @@ var vows = require('vows'),
 
 //Server to test against.
 var server = http.createServer(function(req, res) {
+    var conf = {
+        dirroot: __dirname
+    };
     if (req.url.indexOf('-express') > -1) {
+        conf = null;
         var p = parse(req.url);
         req.url = req.url.replace('-express', '');
         req.body = qs.parse(p.query);
-        echoecho.serve(req, res);
+        echoecho.serve(req, res, conf);
     } else if (echoecho.handle(req)) {
-        echoecho.serve(req, res);
+        echoecho.serve(req, res, conf);
     } else {
         if (req.url.indexOf('skipthisrequest') > -1) {
-            echoecho.serve(req, res);
+            echoecho.serve(req, res, conf);
         } else {
             res.writeHead(200);
             res.end('DEFAULT');
@@ -834,7 +838,7 @@ testRoutes.forEach(function (route) {
 var file = fs.readFileSync(__dirname + '/fixtures/file.json', 'utf8');
 
 function assertFileParam(route, method) {
-    var path = '/foo/bar/baz/echo/' + route + '?file=../tests/fixtures/file.json'
+    var path = '/foo/bar/baz/echo/' + route + '?file=fixtures/file.json',
         context = {
             topic: function() {
                 fetch({
@@ -846,7 +850,7 @@ function assertFileParam(route, method) {
 
     context[route + ' route should use custom response'] = function (res) {
         assert.equal(res.body, file);
-    }
+    };
 
     return context;
 }
