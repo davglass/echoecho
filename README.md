@@ -67,14 +67,13 @@ There are 3 things you need to do inside the Node server providing these tests:
 * Have `echoecho` serve the request
 
 In addition, when serving requests, you can specify an optional directory
-root within which echoecho can find the files to serve for customized
-responses. This is specified by specifying an object containing a dirroot
+root within which `echoecho` can find the files to serve for customized
+responses by providing an object containing a `dirroot`
 key as the third argument to `serve`.
 
 Here's a simple example, assuming your tests serve from `/build/tests/mine/index.html`
 
-```
-
+```js
 //Prepping once
 //Tell echoecho to serve from these base paths
 echoecho.paths([
